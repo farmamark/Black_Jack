@@ -1,15 +1,15 @@
 class Player
-  #include BlackJack
+  # include BlackJack
   attr_accessor :name, :bank, :ruka
 
   def initialize(name)
     @name = name
-    @bank = 10
+    @bank = 100
     @ruka = []
   end
 
   def suma_ochkov
-    temp_sum = BlackJack::KOL.select do |k, v|
+    temp_sum = BlackJack::KOL.select do |k, _v|
       ruka.include?(k)
     end.values
     suma = temp_sum.sum
