@@ -1,13 +1,6 @@
+# frozen_string_literal: true
+
 class BlackJack
-  KOL = {
-    '2♥' => 2, '3♥' => 3, '4♥' => 4, '5♥' => 5, '6♥' => 6, '7♥' => 7, '8♥' => 8,
-    '9♥' => 9, '10♥' => 10, 'J♥' => 10, 'D♥' => 10, 'K♥' => 10, 'A♥' => 1, '2♠' => 2,
-    '3♠' => 3, '4♠' => 4, '5♠' => 5, '6♠' => 6, '7♠' => 7, '8♠' => 8, '9♠' => 9, '10♠' => 10,
-    'J♠' => 10, 'D♠' => 10, 'K♠' => 10, 'A♠' => 1, '2♦' => 2, '3♦' => 3, '4♦' => 4,
-    '5♦' => 5, '6♦' => 6, '7♦' => 7, '8♦' => 8, '9♦' => 9, '10♦' => 10, 'J♦' => 10, 'D♦' => 11,
-    'K♦' => 10, 'A♦' => 1, '2♣' => 2, '3♣' => 3, '4♣' => 4, '5♣' => 5, '6♣' => 6, '7♣' => 7,
-    '8♣' => 8, '9♣' => 9, '10♣' => 10, 'J♣' => 10, 'D♣' => 10, 'K♣' => 10, 'A♣' => 1
-  }
   attr_accessor :players, :cards
 
   def initialize(pl, pl2, kol)
@@ -19,31 +12,31 @@ class BlackJack
     puts "\nИгрок: #{players[0].name}. На счету: #{players[0].bank}"
     puts "Игрок: #{players[1].name}.  На счету: #{players[1].bank}"
     puts 'Банк: 20'
-    puts "Карты диллера: #{'*' * players[1].ruka.count}"
-    puts "Ваши карты: #{players[0].ruka}\nСумма очков: #{players[0].suma_ochkov}"
+    puts "Карты диллера: #{'*' * players[1].card_in_hand.count}"
+    puts "Ваши карты: #{players[0].card_in_hand}\nСумма очков: #{players[0].total_points}"
   end
 
   def start_game
-    cards.razdacza(players[0].ruka)
-    cards.razdacza(players[1].ruka)
+    cards.dealing_cards(players[0].hand)
+    cards.dealing_cards(players[1].hand)
     players[0].bank -= 10
     players[1].bank -= 10
   end
 
-  def hod_dillera
-    cards.nowa_karta(players[1].ruka) if players[1].suma_ochkov <= 17
+  def dealer_action
+    cards.new_card(players[1].hand) if players[1].total_points <= 17
   end
 
-  def karta_3
-    cards.nowa_karta(players[0].ruka)
+  def third_card
+    cards.new_card(players[0].hand)
   end
 
-  def rezultat
-    puts "Карты диллера: #{players[1].ruka}\nСумма очков: #{players[1].suma_ochkov}"
-    puts "Ваши карты: #{players[0].ruka}\nСумма очков: #{players[0].suma_ochkov}"
+  def results_game
+    puts "Карты диллера: #{players[1].card_in_hand}\nСумма очков: #{players[1].total_points}"
+    puts "Ваши карты: #{players[0].card_in_hand}\nСумма очков: #{players[0].total_points}"
     puts '=' * 10
-    a = players[1].suma_ochkov
-    b = players[0].suma_ochkov
+    a = players[1].total_points
+    b = players[0].total_points
     if a > b && a <= 21 || b > 21
       puts 'Выйграл Diller'
       players[1].bank += 20
@@ -58,10 +51,9 @@ class BlackJack
   end
 
   def next_game
-    # raise "bla" if players[0].bank == 0
-    self.cards = Cards.new
-    players[0].ruka.clear
-    players[1].ruka.clear
+    self.cards = Deck.new
+    players[0].hand.clear
+    players[1].hand.clear
   end
 
   def next_game_kredit
@@ -70,7 +62,7 @@ class BlackJack
   end
 
   def validate
-    raise 'У вас кончились деньги' if players[0].bank == 0
-    raise 'Вы уже всё выграли, у диеллера нет денег' if players[1].bank == 0
+    raise 'У вас кончились деньги' if players[0].bank.zero?
+    raise 'Вы уже всё выграли, у диеллера нет денег' if players[1].bank.zero?
   end
 end

@@ -1,12 +1,16 @@
+# frozen_string_literal: true
+
 require_relative 'black_jack'
 require_relative 'player'
 require_relative 'card'
+require_relative 'deck'
+
 puts 'Введите имя: '
 vname = gets.chomp
 people = Player.new(vname)
-komputer = Player.new('Diller')
-koloda = Cards.new
-game = BlackJack.new(people, komputer, koloda)
+komputer = Player.new('Dealer')
+deck = Deck.new
+game = BlackJack.new(people, komputer, deck)
 
 loop do
   game.validate
@@ -18,15 +22,15 @@ loop do
   choise = gets.chomp.to_i
   case choise
   when 1
-    game.hod_dillera
-    game.rezultat
+    game.dealer_action
+    game.results_game
   when 2
-    game.karta_3
-    game.hod_dillera
-    game.rezultat
+    game.third_card
+    game.dealer_action
+    game.results_game
   when 3
-    game.hod_dillera
-    game.rezultat
+    game.dealer_action
+    game.results_game
   end
   puts "\nВаш счет #{game.players[0].bank}"
   puts "1 - Продолжить игру\n2 - Закончить игру"
