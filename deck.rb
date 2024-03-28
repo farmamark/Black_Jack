@@ -20,7 +20,7 @@ class Deck
         x + s
       end
     end.flatten.map do |card|
-      Card.new(card[1],card[0])
+      Card.new(card[1], card[0])
     end.shuffle
   end
 

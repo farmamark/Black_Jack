@@ -10,9 +10,7 @@ class Player
   end
 
   def total_points
-    arr_points = cards.map do |card|
-      card.points
-    end
+    arr_points = cards.map(&:points)
     suma = arr_points.sum
     suma += 10 if arr_points.include?(1) && arr_points.sum <= 11
     suma
