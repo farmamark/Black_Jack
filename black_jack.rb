@@ -12,28 +12,32 @@ class BlackJack
     puts "\nИгрок: #{players[0].name}. На счету: #{players[0].bank}"
     puts "Игрок: #{players[1].name}.  На счету: #{players[1].bank}"
     puts 'Банк: 20'
-    puts "Карты диллера: #{'*' * players[1].card_in_hand.count}"
-    puts "Ваши карты: #{players[0].card_in_hand}\nСумма очков: #{players[0].total_points}"
+    puts "Карты диллера: #{'*' * players[1].viewing_cards.count}"
+    puts "Ваши карты: #{players[0].viewing_cards}\nСумма очков: #{players[0].total_points}"
   end
 
   def start_game
-    cards.dealing_cards(players[0].hand)
-    cards.dealing_cards(players[1].hand)
+    # cards.dealing_cards(players[0].hand)
+    # cards.dealing_cards(players[1].hand)
+    2.times do
+      cards.new_card(players[0])
+      cards.new_card(players[1])
+    end
     players[0].bank -= 10
     players[1].bank -= 10
   end
 
   def dealer_action
-    cards.new_card(players[1].hand) if players[1].total_points <= 17
+    cards.new_card(players[1]) if players[1].total_points <= 17
   end
 
   def third_card
-    cards.new_card(players[0].hand)
+    cards.new_card(players[0])
   end
 
   def results_game
-    puts "Карты диллера: #{players[1].card_in_hand}\nСумма очков: #{players[1].total_points}"
-    puts "Ваши карты: #{players[0].card_in_hand}\nСумма очков: #{players[0].total_points}"
+    puts "Карты диллера: #{players[1].viewing_cards}\nСумма очков: #{players[1].total_points}"
+    puts "Ваши карты: #{players[0].viewing_cards}\nСумма очков: #{players[0].total_points}"
     puts '=' * 10
     a = players[1].total_points
     b = players[0].total_points
@@ -52,8 +56,8 @@ class BlackJack
 
   def next_game
     self.cards = Deck.new
-    players[0].hand.clear
-    players[1].hand.clear
+    players[0].cards.clear
+    players[1].cards.clear
   end
 
   def next_game_kredit

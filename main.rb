@@ -8,9 +8,9 @@ require_relative 'deck'
 puts 'Введите имя: '
 vname = gets.chomp
 people = Player.new(vname)
-komputer = Player.new('Dealer')
+dealer = Player.new('Dealer')
 deck = Deck.new
-game = BlackJack.new(people, komputer, deck)
+game = BlackJack.new(people, dealer, deck)
 
 loop do
   game.validate
